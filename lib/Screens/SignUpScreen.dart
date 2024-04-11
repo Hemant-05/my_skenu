@@ -139,9 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (user != null) {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen.route(),
-                        ),
+                        HomeScreen.route(),
                         (route) => false,
                       );
                     }

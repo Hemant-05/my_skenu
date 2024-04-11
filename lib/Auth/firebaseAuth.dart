@@ -31,6 +31,9 @@ class FirebaseAuthMethods {
           'email': email,
           'status': "Unavailable",
           'uid' : _auth.currentUser?.uid,
+          'follower' : [],
+          'following' : [],
+          'post' : [],
         });
         await sendEmailVerification(context);
       }
