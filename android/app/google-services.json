@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "73112150455",
+    "project_id": "my-skenu",
+    "storage_bucket": "my-skenu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73112150455:android:8aa5bc6fa6ae2676638832",
+        "android_client_info": {
+          "package_name": "com.example.my_skenu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI6LpySzrLIPEEZaIHfXaEEt20pvjk0Yc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
