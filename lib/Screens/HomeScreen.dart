@@ -1,128 +1,72 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:my_skenu/Core/Util/UserModel.dart';
-import 'package:my_skenu/Screens/UserProfileScreen.dart';
+import 'package:my_skenu/Widgets/PostWidget.dart';
+import '../Core/Constant/StringConstant.dart';
+import 'AddPostScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
-  static route() => MaterialPageRoute(
-        builder: (context) => const HomeScreen(),
-      );
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  UserModel model = UserModel(
-    email: 'email',
-    name: 'name',
-    uid: 'uid',
-    follower: ['follower'],
-    following: ['following'],
-    photoUrl: 'photoUrl',
-  );
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        setState(() {});
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Skenu'),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  UserProfileScreen.route(
-                    isMe: true,
-                    model: model,
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.person,
-              ),
-            ),
-          ],
-        ),
-        body: Container(
-          alignment: Alignment.center,
-          child: StreamBuilder<QuerySnapshot>(
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data?.docs.length,
-                  itemBuilder: (context, index) {
-                    final data = snapshot.data?.docs[index];
-                    if (data?['uid'] == model.uid) {
-                      return Container();
-                    }
-                    return ListTile(
-                      onTap: () {
-                        UserModel userModel = UserModel(
-                          email: data?['email'],
-                          name: data?['name'],
-                          uid: data?['uid'],
-                          follower: data?['follower'],
-                          following: data?['following'],
-                          photoUrl: data?['photoUrl'],
-                        );
-                        Navigator.push(
-                          context,
-                          UserProfileScreen.route(
-                            isMe: false,
-                            model: userModel,
-                          ),
-                        );
-                      },
-                      title: Text('${data?['name']}'),
-                      leading: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: const Icon(
-                            Icons.person_rounded,
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Icon(
-                    Icons.error_outline,
-                    size: 200,
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: Text(
-                    'Error',
-                  ),
-                );
-              }
-            },
-            stream: FirebaseFirestore.instance.collection('users').snapshots(),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              AddPostScreen.route(),
+            );
+          },
+          icon: const Icon(
+            Icons.add_circle_outline,
           ),
         ),
+        centerTitle: true,
+        title: Container(
+          height: 30,
+          width: 50,
+          child: Image.asset(
+            icon,
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.send_rounded,
+            ),
+          ),
+        ],
+      ),
+      body: StreamBuilder(
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasData) {
+              final data = snapshot.data;
+              return ListView.builder(
+                itemCount: data!.docs.length,
+                itemBuilder: (context, index) {
+                  return PostWidget(snapshot: data.docs[index].data(),);
+                },
+              );
+            } else {
+              return Text('Error while loading posts');
+            }
+          }
+          return Text(snapshot.error.toString());
+        },
+        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
       ),
     );
   }

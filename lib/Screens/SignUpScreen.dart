@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_skenu/Auth/firebaseAuth.dart';
 import 'package:my_skenu/Core/Util/ShowSnackbar.dart';
-import 'package:my_skenu/Screens/HomeScreen.dart';
+import 'package:my_skenu/Screens/SelectTabScreen.dart';
 import '../Core/Util/MyColors.dart';
 import '../Core/Util/PickImage.dart';
 import '../Widgets/AuthButton.dart';
@@ -75,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       } else {
         Navigator.pushAndRemoveUntil(
           context,
-          HomeScreen.route(),
+          SelectTabScreen.route(),
            (route) => false,
         );
       }

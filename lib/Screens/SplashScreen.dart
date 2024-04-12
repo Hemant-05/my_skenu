@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_skenu/Screens/HomeScreen.dart';
+import 'package:my_skenu/Provider/UserProvider.dart';
+import 'package:my_skenu/Screens/SelectTabScreen.dart';
+import 'package:provider/provider.dart';
 import '../Core/Constant/StringConstant.dart';
 import '../Core/Util/MyColors.dart';
 import 'AuthSelectScreen.dart';
@@ -21,14 +23,21 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    if(widget.isLoggedIn){
+      fetchData();
+    }
     go();
+  }
+
+  void fetchData() async {
+    UserProvider _provider = Provider.of(context,listen: false);
+    await _provider.refreshUser();
   }
   void go() async {
     await Future.delayed(
       const Duration(
-        seconds: 1,
+        seconds: 3,
       ),
     );
     if (!widget.isLoggedIn) {
@@ -39,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       Navigator.pushReplacement(
         context,
-        HomeScreen.route(),
+        SelectTabScreen.route(),
       );
     }
   }

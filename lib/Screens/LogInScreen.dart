@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_skenu/Auth/firebaseAuth.dart';
 import 'package:my_skenu/Core/Util/ShowSnackbar.dart';
-import 'package:my_skenu/Screens/HomeScreen.dart';
+import 'package:my_skenu/Screens/SelectTabScreen.dart';
 import '../Core/Constant/StringConstant.dart';
 import '../Core/Util/MyColors.dart';
 import '../Widgets/AuthButton.dart';
@@ -47,7 +47,7 @@ class _LogInScreenState extends State<LogInScreen> {
         context: context,
       );
       if (res == 'success') {
-        Navigator.pushAndRemoveUntil(context, HomeScreen.route(),(route) => false,);
+        Navigator.pushAndRemoveUntil(context, SelectTabScreen.route(),(route) => false,);
       } else {
         showSnackBar(context, res);
       }

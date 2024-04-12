@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_skenu/Core/Util/MyColors.dart';
 import 'package:my_skenu/Core/Util/UserModel.dart';
+import 'package:my_skenu/Screens/EditUserProfile.dart';
 import 'package:my_skenu/Widgets/AuthButton.dart';
 import 'package:my_skenu/Widgets/ProfileWidget.dart';
 import '../Auth/firebaseAuth.dart';
@@ -100,7 +100,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ? AuthButton(
                     color: MyColors.darkBlue,
                     text: 'Edit Profile',
-                    fun: () {},
+                    fun: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditUserProfile(),
+                        ),
+                      );
+                    },
                     textColor: Colors.white,
                   )
                 : AuthButton(

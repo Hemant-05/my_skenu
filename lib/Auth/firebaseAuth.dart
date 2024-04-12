@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -12,6 +11,12 @@ import '../Core/Util/ShowSnackbar.dart';
 class FirebaseAuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firesotre = FirebaseFirestore.instance;
+
+  Future<UserModel> getUserDetails() async {
+    DocumentSnapshot snapshot =
+        await _firesotre.collection('users').doc(_auth.currentUser!.uid).get();
+    return UserModel.fromSnap(snapshot);
+  }
 
   //EMAIL SIGN IN
   Future<String> signInWithEmail({
@@ -63,7 +68,6 @@ class FirebaseAuthMethods {
       required String pass,
       required BuildContext context}) async {
     String str = 'nothing';
-
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: pass);
       str = 'success';
