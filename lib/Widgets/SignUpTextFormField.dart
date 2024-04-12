@@ -18,7 +18,7 @@ class SignUpTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 55,
+      height: 40,
       width: double.infinity,
       color: MyColors.darkBlue,
       child: TextFormField(

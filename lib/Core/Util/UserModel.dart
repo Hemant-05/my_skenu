@@ -4,7 +4,7 @@ class UserModel {
   final String uid;
   final List follower;
   final List following;
-  final List post;
+  final String photoUrl;
 
   UserModel({
     required this.email,
@@ -12,7 +12,7 @@ class UserModel {
     required this.uid,
     required this.follower,
     required this.following,
-    required this.post,
+    required this.photoUrl
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -21,7 +21,7 @@ class UserModel {
     uid: json['uid'] as String,
     follower: List.from(json['follower']),
     following: List.from(json['following']),
-    post: List.from(json['post']),
+    photoUrl: json['photoUrl'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -30,6 +30,6 @@ class UserModel {
     'uid': uid,
     'follower': follower,
     'following': following,
-    'post': post,
+    'photoUrl' : photoUrl,
   };
 }

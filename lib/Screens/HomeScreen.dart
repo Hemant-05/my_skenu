@@ -15,7 +15,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late UserModel model;
+  UserModel model = UserModel(
+    email: 'email',
+    name: 'name',
+    uid: 'uid',
+    follower: ['follower'],
+    following: ['following'],
+    photoUrl: 'photoUrl',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,71 +57,72 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         body: Container(
-            alignment: Alignment.center,
-            child: StreamBuilder<QuerySnapshot>(
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data?.docs.length,
-                    itemBuilder: (context, index) {
-                      final data = snapshot.data?.docs[index];
-                      if (data?['uid'] == model.uid) {
-                        return Container();
-                      }
-                      return ListTile(
-                        onTap: () {
-                          UserModel userModel = UserModel(
-                            email: data?['email'],
-                            name: data?['name'],
-                            uid: data?['uid'],
-                            follower: data?['follower'],
-                            following: data?['following'],
-                            post: data?['post'],
-                          );
-                          Navigator.push(
-                            context,
-                            UserProfileScreen.route(
-                              isMe: false,
-                              model: userModel,
-                            ),
-                          );
-                        },
-                        title: Text('${data?['name']}'),
-                        leading: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(50),
+          alignment: Alignment.center,
+          child: StreamBuilder<QuerySnapshot>(
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: snapshot.data?.docs.length,
+                  itemBuilder: (context, index) {
+                    final data = snapshot.data?.docs[index];
+                    if (data?['uid'] == model.uid) {
+                      return Container();
+                    }
+                    return ListTile(
+                      onTap: () {
+                        UserModel userModel = UserModel(
+                          email: data?['email'],
+                          name: data?['name'],
+                          uid: data?['uid'],
+                          follower: data?['follower'],
+                          following: data?['following'],
+                          photoUrl: data?['photoUrl'],
+                        );
+                        Navigator.push(
+                          context,
+                          UserProfileScreen.route(
+                            isMe: false,
+                            model: userModel,
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: const Icon(
-                              Icons.person_rounded,
-                              size: 30,
-                            ),
+                        );
+                      },
+                      title: Text('${data?['name']}'),
+                      leading: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: const Icon(
+                            Icons.person_rounded,
+                            size: 30,
                           ),
                         ),
-                      );
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return const Center(
-                    child: Icon(
-                      Icons.error_outline,
-                      size: 200,
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: Text(
-                      'Error',
-                    ),
-                  );
-                }
-              },
-              stream: FirebaseFirestore.instance.collection('users').snapshots(),
-            )),
+                      ),
+                    );
+                  },
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Icon(
+                    Icons.error_outline,
+                    size: 200,
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text(
+                    'Error',
+                  ),
+                );
+              }
+            },
+            stream: FirebaseFirestore.instance.collection('users').snapshots(),
+          ),
+        ),
       ),
     );
   }

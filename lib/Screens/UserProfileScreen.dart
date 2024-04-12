@@ -33,7 +33,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           widget.isMe
               ? IconButton(
                   onPressed: () {
-                    final _auth = FirebaseAuthMethods(FirebaseAuth.instance);
+                    final _auth = FirebaseAuthMethods();
                     _auth.logOut(context);
                   },
                   icon: const Icon(
@@ -80,7 +80,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 ProfileWidget(
                   title: 'Post',
-                  value: widget.model.post.length.toString(),
+                  value: '0',
                 ),
               ],
             ),
