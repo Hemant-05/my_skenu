@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_skenu/Auth/firebaseAuth.dart';
 import 'package:my_skenu/Core/Util/ShowSnackbar.dart';
+import 'package:my_skenu/Provider/UserProvider.dart';
 import 'package:my_skenu/Screens/SelectTabScreen.dart';
 import '../Core/Util/MyColors.dart';
 import '../Core/Util/PickImage.dart';
@@ -73,6 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (str != 'success') {
         showSnackBar(context, str);
       } else {
+        updateUserData(context);
         Navigator.pushAndRemoveUntil(
           context,
           SelectTabScreen.route(),

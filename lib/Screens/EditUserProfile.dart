@@ -6,9 +6,8 @@ import 'package:my_skenu/Core/Util/PickImage.dart';
 import 'package:my_skenu/Core/Util/ShowSnackbar.dart';
 import 'package:my_skenu/Core/Util/StorageMethods.dart';
 import 'package:provider/provider.dart';
-
 import '../Core/Util/MyColors.dart';
-import '../Core/Util/UserModel.dart';
+import '../Core/Util/Models/UserModel.dart';
 import '../Provider/UserProvider.dart';
 
 class EditUserProfile extends StatefulWidget {
@@ -57,6 +56,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
               }
               await FirestoreMethods().updateUser(photoUrl, name, model.uid);
               showSnackBar(context, 'Updated Successfully');
+              updateUserData(context);
               Navigator.pop(context);
               setState(() {
                 _isLoading = false;

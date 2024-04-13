@@ -26,7 +26,7 @@ class PostModel {
     uid: json['uid'] as String,
     name: json['name'] as String,
     postId: json['postId'] as String,
-    datePublished: json['datePublished'],
+    datePublished: json['datePublished'].toDate(),
     postUrl: json['postUrl'] as String,
     profileImage: json['profileImage'] as String,
     likes: json['likes'],

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_skenu/Core/Util/StorageMethods.dart';
-import 'package:my_skenu/Core/Util/UserModel.dart';
+import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Screens/AuthSelectScreen.dart';
 import '../Core/Util/ShowSnackbar.dart';
 

@@ -24,23 +24,25 @@ class MessageWidget extends StatelessWidget {
       padding: EdgeInsets.all(8),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(12)
-      ),
+          color: Colors.grey, borderRadius: BorderRadius.circular(12)),
       child: Column(
         children: [
           Row(
             children: [
               Container(
                 height: 45,
+                width: 45,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25),
                   child: Image.network(
                     photoUrl,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              SizedBox(width: 8,),
+              SizedBox(
+                width: 8,
+              ),
               Text(
                 name,
                 style: const TextStyle(
@@ -67,15 +69,14 @@ class MessageWidget extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.bottomRight,
-            child:  Text(
+            child: Text(
               DateFormat.yMMMd().format(
                 time,
               ),
               style: const TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.bold
-              ),
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold),
             ),
           )
         ],

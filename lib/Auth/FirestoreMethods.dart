@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_skenu/Core/Util/PostModel.dart';
+import 'package:my_skenu/Core/Util/Models/MessageModel.dart';
+import 'package:my_skenu/Core/Util/Models/PostModel.dart';
 import 'package:my_skenu/Core/Util/ShowSnackbar.dart';
 import 'package:my_skenu/Core/Util/StorageMethods.dart';
+import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -38,26 +40,60 @@ class FirestoreMethods {
     }
     return str;
   }
-  Future<void> likePost(String uid,String postId, List likes) async{
-    try{
-      if(likes.contains(uid)){
+
+  Future<void> likePost(String uid, String postId, List likes) async {
+    try {
+      if (likes.contains(uid)) {
         await _firestore.collection('posts').doc(postId).update({
-          'likes' : FieldValue.arrayRemove([uid]),
+          'likes': FieldValue.arrayRemove([uid]),
         });
-      }else{
+      } else {
         await _firestore.collection('posts').doc(postId).update({
-          'likes' : FieldValue.arrayUnion([uid]),
+          'likes': FieldValue.arrayUnion([uid]),
         });
       }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> deletePost(String postId) async {
+    try {
+      await _firestore.collection('posts').doc(postId).delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> onSendMessage(MessageModel model, String chatroomId) async {
+    try{
+      _firestore
+          .collection('chatroom')
+          .doc(chatroomId)
+          .collection('chats')
+          .doc(model.messId)
+          .set(model.toJson());
     }catch(e){
       print(e.toString());
     }
   }
-  Future<void> postComment(String postId,String uid,String name,String photoUrl,String comment,DateTime commentTime) async{
+
+  Future<void> onDeleteMessage(String messId,String chatroomId)async{
     try{
+      _firestore.collection('chatroom').doc(chatroomId).collection('chats').doc(messId).delete();
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
+  Future<void> postComment(String postId, String uid, String name,
+      String photoUrl, String comment, DateTime commentTime) async {
+    try {
       String commentId = Uuid().v1();
-      if(comment.isNotEmpty) {
-        await _firestore.collection('posts').doc(postId)
+      if (comment.isNotEmpty) {
+        await _firestore
+            .collection('posts')
+            .doc(postId)
             .collection('comments')
             .doc(commentId)
             .set({
@@ -68,27 +104,53 @@ class FirestoreMethods {
           'photoUrl': photoUrl,
           'commentId': commentId,
         });
-      }else{
+      } else {
         print('Write something....');
       }
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }
-  Future<void> updateUser(String photoUrl,String name,String uid)async{
-    try{
-      if(photoUrl.isNotEmpty) {
+
+  Future<void> followUser(String userUid, List following, String followingUid,
+      List follower) async {
+    if (following.contains(followingUid)) {
+      await _firestore.collection('users').doc(userUid).update({
+        'following': FieldValue.arrayRemove([followingUid]),
+      });
+      await _firestore.collection('users').doc(followingUid).update({
+        'follower': FieldValue.arrayRemove([userUid]),
+      });
+    } else {
+      await _firestore.collection('users').doc(userUid).update({
+        'following': FieldValue.arrayUnion([followingUid]),
+      });
+      await _firestore.collection('users').doc(followingUid).update({
+        'follower': FieldValue.arrayUnion([userUid]),
+      });
+    }
+  }
+
+  Future<void> updateUser(String photoUrl, String name, String uid) async {
+    try {
+      if (photoUrl.isNotEmpty) {
         await _firestore.collection('users').doc(uid).update({
           'photoUrl': photoUrl,
         });
       }
-      if(name.isNotEmpty){
+      if (name.isNotEmpty) {
         await _firestore.collection('users').doc(uid).update({
           'name': name,
         });
       }
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
+  }
+
+  // Get another user details
+  Future<UserModel> getDetails(String uid) async {
+    final data = await _firestore.collection('users').doc(uid).get();
+    return UserModel.fromSnap(data);
   }
 }

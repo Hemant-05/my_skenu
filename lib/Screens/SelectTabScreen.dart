@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_skenu/Core/Util/MyColors.dart';
-import 'package:my_skenu/Core/Util/UserModel.dart';
+import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Provider/UserProvider.dart';
 import 'package:my_skenu/Screens/HomeScreen.dart';
 import 'package:my_skenu/Screens/UserProfileScreen.dart';
@@ -49,7 +49,7 @@ class _SelectTabScreenState extends State<SelectTabScreen> {
           Text('Liked'),
           Text('Share'),
           Text('Comment'),
-          UserProfileScreen(isMe: true, model: _model),
+          UserProfileScreen(isMe: true, postUserModel: _model),
         ],
         physics: const NeverScrollableScrollPhysics(),
       ),

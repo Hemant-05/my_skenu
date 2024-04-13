@@ -6,7 +6,7 @@ import 'package:my_skenu/Auth/FirestoreMethods.dart';
 import 'package:my_skenu/Core/Util/MyColors.dart';
 import 'package:my_skenu/Core/Util/PickImage.dart';
 import 'package:my_skenu/Core/Util/ShowSnackbar.dart';
-import 'package:my_skenu/Core/Util/UserModel.dart';
+import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Provider/UserProvider.dart';
 import 'package:provider/provider.dart';
 

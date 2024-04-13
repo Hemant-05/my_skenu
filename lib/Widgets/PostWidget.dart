@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_skenu/Auth/FirestoreMethods.dart';
-import 'package:my_skenu/Core/Util/PostModel.dart';
-import 'package:my_skenu/Core/Util/UserModel.dart';
+import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Provider/UserProvider.dart';
 import 'package:my_skenu/Screens/PostCommentScreen.dart';
+import 'package:my_skenu/Screens/UserProfileScreen.dart';
 import 'package:provider/provider.dart';
 
 class PostWidget extends StatefulWidget {
@@ -23,41 +23,55 @@ class _PostWidgetState extends State<PostWidget> {
     return Container(
       height: 600,
       width: double.infinity,
-      // decoration: BoxDecoration(color: Colors.grey),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 80,
             width: double.infinity,
-            child: Row(
-              children: [
-                Container(
-                  height: 60,
-                  width: 60,
-                  margin: EdgeInsets.all(12),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      widget.snapshot['profileImage'],
-                      fit: BoxFit.cover,
+            child: InkWell(
+              onTap: () async {
+                UserModel _model =
+                    await FirestoreMethods().getDetails(widget.snapshot['uid']);
+                Navigator.push(
+                  context,
+                  UserProfileScreen.route(
+                    isMe: false,
+                    postUserModel: _model,
+                  ),
+                );
+              },
+              child: Row(
+                children: [
+                  Container(
+                    height: 60,
+                    width: 60,
+                    margin: const EdgeInsets.all(12),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        widget.snapshot['profileImage'],
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.snapshot['name'],
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                    Text(DateFormat.yMMMd().format(
-                      widget.snapshot['datePublished'].toDate(),
-                    )),
-                  ],
-                )
-              ],
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.snapshot['name'],
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Text(
+                        DateFormat.yMMMd().format(
+                          widget.snapshot['datePublished'].toDate(),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           Container(

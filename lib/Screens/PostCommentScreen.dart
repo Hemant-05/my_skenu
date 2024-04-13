@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_skenu/Auth/FirestoreMethods.dart';
-import 'package:my_skenu/Core/Util/UserModel.dart';
+import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Provider/UserProvider.dart';
 import 'package:my_skenu/Widgets/MessageWidget.dart';
 import 'package:provider/provider.dart';
@@ -75,8 +75,8 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                       final data = snapshot.data!.docs[index].data();
                       return MessageWidget(
                         comment: data['comment'],
-                        photoUrl: model.photoUrl,
-                        name: model.name,
+                        photoUrl: data['photoUrl'],
+                        name: data['name'],
                         time: data['commentTime'].toDate(),
                       );
                     },

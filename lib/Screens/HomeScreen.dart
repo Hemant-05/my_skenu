@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:my_skenu/Screens/AllUsersScreen.dart';
 import 'package:my_skenu/Widgets/PostWidget.dart';
 import '../Core/Constant/StringConstant.dart';
 import 'AddPostScreen.dart';
@@ -37,7 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, AllUsersScreen.route());
+            },
             icon: const Icon(
               Icons.send_rounded,
             ),
@@ -57,7 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
               return ListView.builder(
                 itemCount: data!.docs.length,
                 itemBuilder: (context, index) {
-                  return PostWidget(snapshot: data.docs[index].data(),);
+                  return PostWidget(
+                    snapshot: data.docs[index].data(),
+                  );
                 },
               );
             } else {
@@ -66,7 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return Text(snapshot.error.toString());
         },
-        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .orderBy('datePublished', descending: true)
+            .snapshots(),
       ),
     );
   }
