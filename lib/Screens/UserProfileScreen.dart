@@ -6,6 +6,7 @@ import 'package:my_skenu/Core/Util/MyColors.dart';
 import 'package:my_skenu/Core/Util/Models/PostModel.dart';
 import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Screens/AddPostScreen.dart';
+import 'package:my_skenu/Screens/EditPostScreen.dart';
 import 'package:my_skenu/Screens/EditUserProfile.dart';
 import 'package:my_skenu/Widgets/AuthButton.dart';
 import 'package:my_skenu/Widgets/ProfileWidget.dart';
@@ -33,7 +34,24 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  void onSelected(int index) {}
+  bool isfollow = false;
+  int posts = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    countPosts();
+  }
+
+  void countPosts() async {
+    var data = await FirebaseFirestore.instance
+        .collection('posts')
+        .where('uid', isEqualTo: widget.postUserModel.uid)
+        .get();
+    posts = data.docs.length;
+    setState(() {});
+  }
 
   void showDeleteDialog(String postId) async {
     showDialog(
@@ -63,7 +81,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  showMenuDialog(String postId) async {
+  void followFunction(String uid, List following) async {
+    FirestoreMethods().followUser(
+      uid,
+      following,
+      widget.postUserModel.uid,
+    );
+    updateUserData(context);
+  }
+
+  showMenuDialog(String postUrl, String description, String postId) async {
     showDialog(
       context: context,
       builder: (context) {
@@ -73,6 +100,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  EditPostScreen.route(
+                    description: description,
+                    postUrl: postUrl,
+                    postId: postId,
+                  ),
+                );
               },
               child: Text('Edit'),
             ),
@@ -93,6 +128,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     UserModel model = Provider.of<UserProvider>(context).getModel;
     bool isMe = (model.uid.compareTo(widget.postUserModel.uid) == 0);
+    UserModel postUserModel = widget.postUserModel;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -129,34 +165,34 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                     child: Image.network(
-                      widget.postUserModel.photoUrl,
+                      postUserModel.photoUrl,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 ProfileWidget(
                   title: 'Followers',
-                  value: widget.postUserModel.follower.length.toString(),
+                  value: postUserModel.follower.length.toString(),
                 ),
                 ProfileWidget(
                   title: 'Following',
-                  value: widget.postUserModel.following.length.toString(),
+                  value: postUserModel.following.length.toString(),
                 ),
                 ProfileWidget(
                   title: 'Posts',
-                  value: '0',
+                  value: '$posts',
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               width: double.infinity,
               height: 70,
               child: Text(
-                widget.postUserModel.name,
-                style: TextStyle(
+                postUserModel.name,
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -176,26 +212,38 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     },
                     textColor: Colors.white,
                   )
-                : AuthButton(
-                    color: widget.postUserModel.follower.contains(model.uid)
-                        ? Colors.grey
-                        : MyColors.darkBlue,
-                    text: 'Follow',
-                    fun: () {
-                      FirestoreMethods().followUser(
-                        model.uid,
-                        model.following,
-                        widget.postUserModel.uid,
-                        widget.postUserModel.follower,
-                      );
-                    },
-                    textColor: Colors.white,
-                  ),
+                : postUserModel.follower.contains(model.uid)
+                    ? AuthButton(
+                        color: Colors.grey,
+                        text: 'Unfollow',
+                        fun: () async {
+                          followFunction(model.uid, model.following);
+                          postUserModel = await FirestoreMethods()
+                              .getDetails(postUserModel.uid);
+                          setState(() {
+                            isfollow = false;
+                          });
+                        },
+                        textColor: Colors.white,
+                      )
+                    : AuthButton(
+                        color: MyColors.darkyellow,
+                        text: 'Follow',
+                        fun: () async {
+                          followFunction(model.uid, model.following);
+                          postUserModel = await FirestoreMethods()
+                              .getDetails(postUserModel.uid);
+                          setState(() {
+                            isfollow = true;
+                          });
+                        },
+                        textColor: Colors.white,
+                      ),
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('posts')
-                    .where('uid', isEqualTo: widget.postUserModel.uid)
+                    .where('uid', isEqualTo: postUserModel.uid)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -205,6 +253,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   } else if (snapshot.connectionState ==
                       ConnectionState.active) {
                     var data = snapshot.data!.docs;
+                    posts = data.length;
                     if (data.length == 0) {
                       return Center(
                         child: InkWell(
@@ -254,7 +303,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               visible: isMe,
                               child: IconButton(
                                 onPressed: () {
-                                  showMenuDialog(tempModel.postId);
+                                  showMenuDialog(
+                                    tempModel.postUrl,
+                                    tempModel.description,
+                                    tempModel.postId,
+                                  );
                                 },
                                 icon: const Icon(
                                   Icons.more_vert,

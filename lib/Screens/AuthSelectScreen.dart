@@ -30,7 +30,7 @@ class AuthSelectScreen extends StatelessWidget {
                 fun: () {
                   Navigator.push(context,LogInScreen.route());
                 },
-                color: MyColors.yellow,
+                color: MyColors.darkyellow,
                 text: 'LOG IN WITH EMAIL',
                 textColor: MyColors.purpul,),
             const SizedBox(

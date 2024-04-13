@@ -46,9 +46,6 @@ class _SelectTabScreenState extends State<SelectTabScreen> {
         onPageChanged: onPageChanged,
         children: [
           HomeScreen(),
-          Text('Liked'),
-          Text('Share'),
-          Text('Comment'),
           UserProfileScreen(isMe: true, postUserModel: _model),
         ],
         physics: const NeverScrollableScrollPhysics(),
@@ -57,31 +54,13 @@ class _SelectTabScreenState extends State<SelectTabScreen> {
         unselectedItemColor: Colors.black,
         onTap: (val) => onNavigationTapped(val),
         currentIndex: currentIndex,
-        selectedItemColor: MyColors.yellow,
+        selectedItemColor: MyColors.darkyellow,
         items: const [
           BottomNavigationBarItem(
             label: 'Home',
             activeIcon: Icon(Icons.home_outlined),
             icon: Icon(
               Icons.home,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Liked',
-            icon: Icon(
-              Icons.favorite_border_outlined,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Share',
-            icon: Icon(
-              Icons.share,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Comment',
-            icon: Icon(
-              Icons.comment,
             ),
           ),
           BottomNavigationBarItem(

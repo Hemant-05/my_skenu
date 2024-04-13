@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-class MessageWidget extends StatelessWidget {
-  const MessageWidget({
+class CommentMessageWidget extends StatelessWidget {
+  const CommentMessageWidget({
     super.key,
     required this.comment,
     required this.time,
@@ -20,8 +20,8 @@ class MessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8),
-      padding: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       width: double.infinity,
       decoration: BoxDecoration(
           color: Colors.grey, borderRadius: BorderRadius.circular(12)),

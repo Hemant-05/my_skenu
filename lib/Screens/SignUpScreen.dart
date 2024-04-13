@@ -109,7 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
         automaticallyImplyLeading: false,
-        backgroundColor: MyColors.yellow,
+        backgroundColor: MyColors.darkyellow,
       ),
       body: _isLoading
           ? const Center(

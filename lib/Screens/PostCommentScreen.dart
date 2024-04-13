@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:my_skenu/Auth/FirestoreMethods.dart';
 import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Provider/UserProvider.dart';
-import 'package:my_skenu/Widgets/MessageWidget.dart';
+import 'package:my_skenu/Widgets/CommentMessageWidget.dart';
 import 'package:provider/provider.dart';
 
 class PostCommentScreen extends StatefulWidget {
@@ -73,7 +73,7 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       final data = snapshot.data!.docs[index].data();
-                      return MessageWidget(
+                      return CommentMessageWidget(
                         comment: data['comment'],
                         photoUrl: data['photoUrl'],
                         name: data['name'],

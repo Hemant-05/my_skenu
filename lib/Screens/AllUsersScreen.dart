@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_skenu/Core/Util/Models/UserModel.dart';
+import 'package:my_skenu/Core/Util/MyColors.dart';
 import 'package:my_skenu/Screens/ChatScreen.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,12 @@ class AllUsersScreen extends StatefulWidget {
 }
 
 class _AllUsersScreenState extends State<AllUsersScreen> {
+
   String createChatroomId(String id1, String id2) {
-    id1 = id1 + id2;
-    return id1;
+    if(id1[0].toLowerCase().codeUnits[0] > id2[0].toLowerCase().codeUnits[0]){
+      return '$id1$id2';
+    }
+    return '$id2$id1';
   }
 
   @override
@@ -28,7 +32,8 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
     UserModel _model = Provider.of<UserProvider>(context).getModel;
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Users'),
+        backgroundColor: MyColors.darkyellow,
+        title: Text('All Users',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('users').snapshots(),

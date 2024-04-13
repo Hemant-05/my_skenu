@@ -112,8 +112,20 @@ class FirestoreMethods {
     }
   }
 
+  Future<void> updatePost(String description,String photoUrl,String postId) async{
+    try{
+      await _firestore.collection('posts').doc(postId).update({
+        'description' : description,
+        'postUrl' : photoUrl,
+        'datePublished' : DateTime.now(),
+      });
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
   Future<void> followUser(String userUid, List following, String followingUid,
-      List follower) async {
+      ) async {
     if (following.contains(followingUid)) {
       await _firestore.collection('users').doc(userUid).update({
         'following': FieldValue.arrayRemove([followingUid]),
