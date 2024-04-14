@@ -16,16 +16,24 @@ import '../Provider/UserProvider.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen(
-      {super.key, required this.isMe, required this.postUserModel});
+      {super.key,
+      required this.isMe,
+      required this.postUserModel,
+      required this.uid});
 
   final UserModel postUserModel;
   final bool isMe;
+  final String uid;
 
-  static route({required bool isMe, required UserModel postUserModel}) =>
+  static route(
+          {required bool isMe,
+          required UserModel postUserModel,
+          required String uid}) =>
       MaterialPageRoute(
         builder: (context) => UserProfileScreen(
           isMe: isMe,
           postUserModel: postUserModel,
+          uid: uid,
         ),
       );
 
@@ -34,22 +42,26 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  bool isfollow = false;
+  bool isfollowing = false;
   int posts = 0;
+  int follower = 0;
+  int following = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    countPosts();
+    getData();
   }
 
-  void countPosts() async {
+  void getData() async {
     var data = await FirebaseFirestore.instance
         .collection('posts')
         .where('uid', isEqualTo: widget.postUserModel.uid)
         .get();
     posts = data.docs.length;
+    follower = widget.postUserModel.follower.length;
+    following = widget.postUserModel.following.length;
+    isfollowing = widget.postUserModel.follower.contains(widget.uid);
     setState(() {});
   }
 
@@ -64,6 +76,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               onPressed: () {
                 FirestoreMethods().deletePost(postId);
                 Navigator.pop(context);
+                setState(() {
+                  posts--;
+                });
               },
               child: const Text(
                 'Yes',
@@ -174,11 +189,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
                 ProfileWidget(
                   title: 'Followers',
-                  value: postUserModel.follower.length.toString(),
+                  value: follower.toString(),
                 ),
                 ProfileWidget(
                   title: 'Following',
-                  value: postUserModel.following.length.toString(),
+                  value: following.toString(),
                 ),
                 ProfileWidget(
                   title: 'Posts',
@@ -212,7 +227,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     },
                     textColor: Colors.white,
                   )
-                : postUserModel.follower.contains(model.uid)
+                : isfollowing
                     ? AuthButton(
                         color: Colors.grey,
                         text: 'Unfollow',
@@ -221,7 +236,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           postUserModel = await FirestoreMethods()
                               .getDetails(postUserModel.uid);
                           setState(() {
-                            isfollow = false;
+                            isfollowing = false;
+                            follower--;
                           });
                         },
                         textColor: Colors.white,
@@ -231,10 +247,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         text: 'Follow',
                         fun: () async {
                           followFunction(model.uid, model.following);
-                          postUserModel = await FirestoreMethods()
-                              .getDetails(postUserModel.uid);
                           setState(() {
-                            isfollow = true;
+                            isfollowing = true;
+                            follower++;
                           });
                         },
                         textColor: Colors.white,
@@ -254,7 +269,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ConnectionState.active) {
                     var data = snapshot.data!.docs;
                     posts = data.length;
-                    if (data.length == 0) {
+                    if (data.length == 0 && isMe) {
                       return Center(
                         child: InkWell(
                           onTap: () {
@@ -265,6 +280,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             style: TextStyle(
                               color: Colors.blue,
                             ),
+                          ),
+                        ),
+                      );
+                    } else if (data.length == 0 && !isMe) {
+                      return const Center(
+                        child: Text(
+                          'No post here',
+                          style: TextStyle(
+                            color: Colors.blue,
                           ),
                         ),
                       );

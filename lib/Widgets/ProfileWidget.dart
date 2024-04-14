@@ -12,11 +12,11 @@ class ProfileWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 10,),
-        Text(value,style: TextStyle(fontWeight: FontWeight.bold),),
-        SizedBox(height: 50,)
+        const SizedBox(height: 10,),
+        Text(value,style: const TextStyle(fontWeight: FontWeight.bold),),
+        const SizedBox(height: 50,)
       ],
     );
   }

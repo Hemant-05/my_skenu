@@ -66,22 +66,27 @@ class FirestoreMethods {
   }
 
   Future<void> onSendMessage(MessageModel model, String chatroomId) async {
-    try{
+    try {
       _firestore
           .collection('chatroom')
           .doc(chatroomId)
           .collection('chats')
           .doc(model.messId)
           .set(model.toJson());
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }
 
-  Future<void> onDeleteMessage(String messId,String chatroomId)async{
-    try{
-      _firestore.collection('chatroom').doc(chatroomId).collection('chats').doc(messId).delete();
-    }catch(e){
+  Future<void> onDeleteMessage(String messId, String chatroomId) async {
+    try {
+      _firestore
+          .collection('chatroom')
+          .doc(chatroomId)
+          .collection('chats')
+          .doc(messId)
+          .delete();
+    } catch (e) {
       print(e.toString());
     }
   }
@@ -112,20 +117,24 @@ class FirestoreMethods {
     }
   }
 
-  Future<void> updatePost(String description,String photoUrl,String postId) async{
-    try{
+  Future<void> updatePost(
+      String description, String photoUrl, String postId) async {
+    try {
       await _firestore.collection('posts').doc(postId).update({
-        'description' : description,
-        'postUrl' : photoUrl,
-        'datePublished' : DateTime.now(),
+        'description': description,
+        'postUrl': photoUrl,
+        'datePublished': DateTime.now(),
       });
-    }catch(e){
+    } catch (e) {
       print(e.toString());
     }
   }
 
-  Future<void> followUser(String userUid, List following, String followingUid,
-      ) async {
+  Future<void> followUser(
+    String userUid,
+    List following,
+    String followingUid,
+  ) async {
     if (following.contains(followingUid)) {
       await _firestore.collection('users').doc(userUid).update({
         'following': FieldValue.arrayRemove([followingUid]),
@@ -164,5 +173,11 @@ class FirestoreMethods {
   Future<UserModel> getDetails(String uid) async {
     final data = await _firestore.collection('users').doc(uid).get();
     return UserModel.fromSnap(data);
+  }
+
+  //for future builder to get user data
+  Future<DocumentSnapshot> getUserData(String uid) async {
+    final doc = await _firestore.collection('users').doc(uid);
+    return await doc.get();
   }
 }

@@ -38,6 +38,7 @@ class _PostWidgetState extends State<PostWidget> {
                   UserProfileScreen.route(
                     isMe: false,
                     postUserModel: _model,
+                    uid: model.uid,
                   ),
                 );
               },

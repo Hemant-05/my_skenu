@@ -46,7 +46,7 @@ class _SelectTabScreenState extends State<SelectTabScreen> {
         onPageChanged: onPageChanged,
         children: [
           HomeScreen(),
-          UserProfileScreen(isMe: true, postUserModel: _model),
+          UserProfileScreen(isMe: true, postUserModel: _model,uid: _model.uid,),
         ],
         physics: const NeverScrollableScrollPhysics(),
       ),

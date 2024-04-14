@@ -86,6 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   UserProfileScreen.route(
                     isMe: false,
                     postUserModel: widget.chatUserModel,
+                    uid: model.uid,
                   ),
                 );
               },

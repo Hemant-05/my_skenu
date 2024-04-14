@@ -177,7 +177,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
