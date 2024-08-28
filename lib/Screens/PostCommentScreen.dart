@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_skenu/Auth/FirestoreMethods.dart';
 import 'package:my_skenu/Core/Util/Models/UserModel.dart';
+import 'package:my_skenu/Core/Util/ShowSnackbar.dart';
 import 'package:my_skenu/Provider/UserProvider.dart';
 import 'package:my_skenu/Widgets/CommentMessageWidget.dart';
 import 'package:provider/provider.dart';
@@ -45,69 +46,77 @@ class _PostCommentScreenState extends State<PostCommentScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                await FirestoreMethods().postComment(
-                  widget.postId,
-                  model.uid,
-                  model.name,
-                  model.photoUrl,
-                  commentController.text.trim(),
-                  DateTime.now(),
-                );
+                if(commentController.text.isNotEmpty){
+                  await FirestoreMethods().postComment(
+                    widget.postId,
+                    model.uid,
+                    model.name,
+                    model.photoUrl,
+                    commentController.text.trim(),
+                    DateTime.now(),
+                  );
+                }else{
+                  showSnackBar(context, 'Write a comment...');
+                }
                 commentController.clear();
               },
-              child: Text('post'))
+              child: const Text('post'))
         ],
       ),
       body: Column(
         children: [
           Expanded(
-              child: StreamBuilder(
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.connectionState == ConnectionState.active) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      final data = snapshot.data!.docs[index].data();
-                      return CommentMessageWidget(
-                        comment: data['comment'],
-                        photoUrl: data['photoUrl'],
-                        name: data['name'],
-                        time: data['commentTime'].toDate(),
-                      );
-                    },
+            child: StreamBuilder(
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                } else {
-                  return Text('Error while fetching comment');
+                } else if (snapshot.connectionState == ConnectionState.active) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final data = snapshot.data!.docs[index].data();
+                        return CommentMessageWidget(
+                          comment: data['comment'],
+                          photoUrl: data['photoUrl'],
+                          name: data['name'],
+                          time: data['commentTime'].toDate(),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Text('Error while fetching comment');
+                  }
                 }
-              }
-              return Container();
-            },
-            stream: FirebaseFirestore.instance
-                .collection('posts')
-                .doc(widget.postId)
-                .collection('comments')
-                .snapshots(),
-          )),
+                return Container();
+              },
+              stream: FirebaseFirestore.instance
+                  .collection('posts')
+                  .doc(widget.postId)
+                  .collection('comments')
+                  .snapshots(),
+            ),
+          ),
           Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: TextField(
               controller: commentController,
               decoration: InputDecoration(
                 hintText: 'Comment as ${model.name}',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: Colors.black, width: 1)),
+                    borderSide:
+                        const BorderSide(color: Colors.black, width: 1)),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: Colors.black, width: 1)),
+                    borderSide:
+                        const BorderSide(color: Colors.black, width: 1)),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(18),
-                    borderSide: BorderSide(color: Colors.black, width: 1)),
+                    borderSide:
+                        const BorderSide(color: Colors.black, width: 1)),
               ),
             ),
           ),

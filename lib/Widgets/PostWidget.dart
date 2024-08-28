@@ -4,8 +4,10 @@ import 'package:my_skenu/Auth/FirestoreMethods.dart';
 import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Provider/UserProvider.dart';
 import 'package:my_skenu/Screens/PostCommentScreen.dart';
+import 'package:my_skenu/Screens/PostDetailsScreen.dart';
 import 'package:my_skenu/Screens/UserProfileScreen.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PostWidget extends StatefulWidget {
   const PostWidget({super.key, required this.snapshot});
@@ -17,6 +19,11 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  void shareImageAndText(String description, String photoUrl) async {
+    print('$photoUrl');
+    await Share.share('$photoUrl \n $description');
+  }
+
   @override
   Widget build(BuildContext context) {
     UserModel model = Provider.of<UserProvider>(context).getModel;
@@ -61,7 +68,7 @@ class _PostWidgetState extends State<PostWidget> {
                     children: [
                       Text(
                         widget.snapshot['name'],
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       Text(
@@ -75,21 +82,31 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 400,
-            child: Image.network(
-              widget.snapshot['postUrl'],
-              fit: BoxFit.cover,
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                PostDetailsScreen.route(
+                  postUid: widget.snapshot['postId'],
+                ),
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              height: 400,
+              child: Image.network(
+                widget.snapshot['postUrl'],
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Container(
             height: 40,
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             alignment: Alignment.centerLeft,
             child: Text(
               widget.snapshot['description'],
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -116,8 +133,11 @@ class _PostWidgetState extends State<PostWidget> {
                           ),
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: Icon(
+                    onPressed: () async {
+                      shareImageAndText(widget.snapshot['description'],
+                          widget.snapshot['postUrl']);
+                    },
+                    icon: const Icon(
                       Icons.share,
                     ),
                   ),
@@ -130,7 +150,7 @@ class _PostWidgetState extends State<PostWidget> {
                         ),
                       );
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.insert_comment,
                     ),
                   ),
@@ -138,17 +158,17 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               IconButton(
                 onPressed: () {},
-                icon: Icon(
+                icon: const Icon(
                   Icons.bookmark_border_rounded,
                 ),
               ),
             ],
           ),
           Container(
-            margin: EdgeInsets.only(left: 12),
+            margin: const EdgeInsets.only(left: 12),
             child: Text(
-              '${widget.snapshot['likes'].length} Likes',
-              style: TextStyle(
+              '${widget.snapshot['likes'].length} ${widget.snapshot['likes'].length > 1 ? 'Likes' : 'Like'}',
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),

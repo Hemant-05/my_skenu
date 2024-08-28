@@ -50,7 +50,7 @@ class PostModel {
       uid: data['uid'] as String,
       name: data['name'] as String,
       postId: data['postId'] as String,
-      datePublished: data['datePublished'],
+      datePublished: data['datePublished'].toDate(),
       postUrl: data['postUrl'] as String,
       profileImage: data['profileImage'] as String,
       likes: data['likes'],

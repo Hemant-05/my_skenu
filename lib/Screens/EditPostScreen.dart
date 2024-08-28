@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_skenu/Auth/FirestoreMethods.dart';
 import 'package:my_skenu/Core/Util/ShowSnackbar.dart';
@@ -97,6 +98,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
         actions: [
           TextButton(
             onPressed: () async {
+              setState(() {
+                _isLoading = true;
+              });
               String description = editCaptionController.text.trim();
               if (_file != null) {
                 String photoUrl = await StorageMethods()
@@ -107,6 +111,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
               } else {
                 showSnackBar(context, 'Change post picture');
               }
+              setState(() {
+                _isLoading = false;
+              });
             },
             child: Text(
               'Post',
@@ -122,7 +129,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
           children: [
             Container(
               height: 2,
-              child: _isLoading ? const LinearProgressIndicator() : Container(),
+              child: _isLoading ? LinearProgressIndicator() : Container(),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -180,17 +187,17 @@ class _EditPostScreenState extends State<EditPostScreen> {
             const SizedBox(
               height: 10,
             ),
-            Container(
-              height: 50,
-              width: double.infinity,
-              margin: const EdgeInsets.all(20),
-              child: TextField(
-                controller: editCaptionController,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Write a Caption....',
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Expanded(
+                child: TextField(
+                  controller: editCaptionController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Write a Caption....',
+                  ),
+                  maxLines: null,
                 ),
-                maxLines: 5,
               ),
             ),
           ],

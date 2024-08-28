@@ -43,6 +43,8 @@ class FirebaseAuthMethods {
           uid: user.uid,
           follower: [],
           following: [],
+          liked: [],
+          saved: [],
           photoUrl: photoUrl,
         );
         await _firesotre.collection('users').doc(user.uid).set(

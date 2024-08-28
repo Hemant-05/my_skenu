@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class CommentMessageWidget extends StatelessWidget {
@@ -20,14 +18,22 @@ class CommentMessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.symmetric(
+        vertical: 4,
+        horizontal: 10,
+      ),
       padding: const EdgeInsets.all(8),
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.grey, borderRadius: BorderRadius.circular(12)),
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(
+          12,
+        ),
+      ),
       child: Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 height: 45,
@@ -40,8 +46,8 @@ class CommentMessageWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 8,
+              const SizedBox(
+                width: 10,
               ),
               Text(
                 name,
@@ -55,8 +61,8 @@ class CommentMessageWidget extends StatelessWidget {
             ],
           ),
           Container(
-            width: 260,
-            margin: EdgeInsets.all(5),
+            width: 250,
+            margin: const EdgeInsets.all(5),
             alignment: Alignment.centerLeft,
             child: Text(
               comment,

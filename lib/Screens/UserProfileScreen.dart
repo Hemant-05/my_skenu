@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_skenu/Auth/FirestoreMethods.dart';
+import 'package:my_skenu/Core/Util/DateFormatter.dart';
 import 'package:my_skenu/Core/Util/MyColors.dart';
 import 'package:my_skenu/Core/Util/Models/PostModel.dart';
 import 'package:my_skenu/Core/Util/Models/UserModel.dart';
 import 'package:my_skenu/Screens/AddPostScreen.dart';
 import 'package:my_skenu/Screens/EditPostScreen.dart';
 import 'package:my_skenu/Screens/EditUserProfile.dart';
+import 'package:my_skenu/Screens/PostDetailsScreen.dart';
 import 'package:my_skenu/Widgets/AuthButton.dart';
 import 'package:my_skenu/Widgets/ProfileWidget.dart';
 import 'package:provider/provider.dart';
@@ -110,7 +112,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       context: context,
       builder: (context) {
         return SimpleDialog(
-          title: Text('Options'),
+          title: const Text('Options'),
           children: [
             SimpleDialogOption(
               onPressed: () {
@@ -124,10 +126,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 );
               },
-              child: Text('Edit'),
+              child: const Text('Edit'),
             ),
             SimpleDialogOption(
-              child: Text('Delete'),
+              child: const Text('Delete'),
               onPressed: () async {
                 Navigator.pop(context);
                 showDeleteDialog(postId);
@@ -159,7 +161,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 )
               : IconButton(
                   onPressed: () {},
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.more_vert,
                   ),
                 ),
@@ -177,7 +179,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   width: 100,
                   decoration: BoxDecoration(
                     color: Colors.grey,
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
@@ -269,7 +271,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ConnectionState.active) {
                     var data = snapshot.data!.docs;
                     posts = data.length;
-                    if (data.length == 0 && isMe) {
+                    if (data.isEmpty && isMe) {
                       return Center(
                         child: InkWell(
                           onTap: () {
@@ -283,7 +285,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                         ),
                       );
-                    } else if (data.length == 0 && !isMe) {
+                    } else if (data.isEmpty && !isMe) {
                       return const Center(
                         child: Text(
                           'No post here',
@@ -299,8 +301,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           PostModel tempModel =
                               PostModel.fromJson(data[index].data());
                           return ListTile(
-                            contentPadding: EdgeInsets.all(10),
-                            leading: Container(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PostDetailsScreen.route(
+                                  postUid: tempModel.postId,
+                                ),
+                              );
+                            },
+                            contentPadding: const EdgeInsets.all(10),
+                            leading: SizedBox(
                               height: 60,
                               width: 60,
                               child: ClipRRect(
@@ -311,15 +321,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 ),
                               ),
                             ),
-                            title: Text(
-                              tempModel.description,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                            title: SizedBox(
+                              height: 50,
+                              child: Text(
+                                tempModel.description,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              overflow: TextOverflow.ellipsis,
                             ),
                             subtitle: Text(
-                              DateFormat.yMMMd().format(
+                              DateFormatterYMMMD(
                                 tempModel.datePublished,
                               ),
                             ),
@@ -342,10 +355,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         },
                       );
                     } else {
-                      return Text('No Data here');
+                      return const Text('No Data here');
                     }
                   }
-                  return Text('some error accoured');
+                  return const Text('some error accoured');
                 },
               ),
             ),

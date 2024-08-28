@@ -27,28 +27,32 @@ class _SelectTabScreenState extends State<SelectTabScreen> {
     pageController.dispose();
   }
 
-  onNavigationTapped(int index){
+  onNavigationTapped(int index) {
     pageController.jumpToPage(index);
   }
 
-  onPageChanged(int index){
+  onPageChanged(int index) {
     setState(() {
       currentIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     UserModel _model = Provider.of<UserProvider>(context).getModel;
     return Scaffold(
-
       body: PageView(
         controller: pageController,
         onPageChanged: onPageChanged,
-        children: [
-          HomeScreen(),
-          UserProfileScreen(isMe: true, postUserModel: _model,uid: _model.uid,),
-        ],
         physics: const NeverScrollableScrollPhysics(),
+        children: [
+          const HomeScreen(),
+          UserProfileScreen(
+            isMe: true,
+            postUserModel: _model,
+            uid: _model.uid,
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.black,

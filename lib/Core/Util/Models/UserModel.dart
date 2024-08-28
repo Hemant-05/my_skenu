@@ -6,6 +6,8 @@ class UserModel {
   final String uid;
   final List follower;
   final List following;
+  final List liked;
+  final List saved;
   final String photoUrl;
 
   UserModel(
@@ -14,6 +16,8 @@ class UserModel {
       required this.uid,
       required this.follower,
       required this.following,
+      required this.liked,
+      required this.saved,
       required this.photoUrl});
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -22,6 +26,8 @@ class UserModel {
         uid: json['uid'] as String,
         follower: List.from(json['follower']),
         following: List.from(json['following']),
+        liked: List.from(json['liked']),
+        saved: List.from(json['saved']),
         photoUrl: json['photoUrl'],
       );
 
@@ -31,6 +37,8 @@ class UserModel {
         'uid': uid,
         'follower': follower,
         'following': following,
+        'liked': liked,
+        'saved': saved,
         'photoUrl': photoUrl,
       };
 
@@ -42,6 +50,8 @@ class UserModel {
       uid: snap['uid'],
       follower: snap['follower'],
       following: snap['following'],
+      liked: snap['liked'],
+      saved: snap['saved'],
       photoUrl: snap['photoUrl'],
     );
   }
