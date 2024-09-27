@@ -75,6 +75,7 @@ class _PostWidgetState extends State<PostWidget> {
                         DateFormat.yMMMd().format(
                           widget.snapshot['datePublished'].toDate(),
                         ),
+                        style: TextStyle(fontSize: 12),
                       ),
                     ],
                   )

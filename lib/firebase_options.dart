@@ -47,29 +47,32 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDgz98ar2Dh14La2gdXe5rFLk2i6bHqwGk',
-    appId: '1:73112150455:web:9a728baf47d402c3638832',
-    messagingSenderId: '73112150455',
-    projectId: 'my-skenu',
-    authDomain: 'my-skenu.firebaseapp.com',
-    storageBucket: 'my-skenu.appspot.com',
-    measurementId: 'G-6JSF7NCEKZ',
+    apiKey: 'AIzaSyCbaaxDQIKKHg10q14q-Buorvm0-QyRNUQ',
+    appId: '1:659879338452:web:d4f302fd77319aa97ab641',
+    messagingSenderId: '659879338452',
+    projectId: 'sandesh-5fcac',
+    authDomain: 'sandesh-5fcac.firebaseapp.com',
+    storageBucket: 'sandesh-5fcac.appspot.com',
+    measurementId: 'G-32MZ3CJZBP',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCI6LpySzrLIPEEZaIHfXaEEt20pvjk0Yc',
-    appId: '1:73112150455:android:8aa5bc6fa6ae2676638832',
-    messagingSenderId: '73112150455',
-    projectId: 'my-skenu',
-    storageBucket: 'my-skenu.appspot.com',
+    apiKey: 'AIzaSyByMJ12hsnwZzFeKFXU3DhmaeI_-1g42IE',
+    appId: '1:659879338452:android:7fab73561400c8607ab641',
+    messagingSenderId: '659879338452',
+    projectId: 'sandesh-5fcac',
+    storageBucket: 'sandesh-5fcac.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBi5qtSQlL-EL7T8Brn6BC8HBelyVt1mJQ',
-    appId: '1:73112150455:ios:7c640adfe6bef461638832',
-    messagingSenderId: '73112150455',
-    projectId: 'my-skenu',
-    storageBucket: 'my-skenu.appspot.com',
+    apiKey: 'AIzaSyD1fyVnfX2RBRDKjOXHbLQvBcDh2s4NTSc',
+    appId: '1:659879338452:ios:3b9d7c79f1f3d5a67ab641',
+    messagingSenderId: '659879338452',
+    projectId: 'sandesh-5fcac',
+    storageBucket: 'sandesh-5fcac.appspot.com',
+    androidClientId: '659879338452-bmntt70lh9liteckmpd52diuldb2mud2.apps.googleusercontent.com',
+    iosClientId: '659879338452-ij1g7cq2l6jl7l5bf9mf2ujsock11scu.apps.googleusercontent.com',
     iosBundleId: 'com.example.mySkenu',
   );
+
 }

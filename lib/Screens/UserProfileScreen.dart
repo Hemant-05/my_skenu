@@ -186,6 +186,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: Image.network(
                       postUserModel.photoUrl,
                       fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        return const Center(child: CircularProgressIndicator());
+                      },
                     ),
                   ),
                 ),

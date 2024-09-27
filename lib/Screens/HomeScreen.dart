@@ -57,6 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.hasData) {
               final data = snapshot.data;
+              if(data!.docs.isEmpty){
+                return const Center(child: Text('No post yet !!'),);
+              }
               return ListView.builder(
                 itemCount: data!.docs.length,
                 itemBuilder: (context, index) {
@@ -66,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               );
             } else {
-              return Text('Error while loading posts');
+              return const Text('Error while loading posts');
             }
           }
           return Text(snapshot.error.toString());

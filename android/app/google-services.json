@@ -1,26 +1,43 @@
 {
   "project_info": {
-    "project_number": "73112150455",
-    "project_id": "my-skenu",
-    "storage_bucket": "my-skenu.appspot.com"
+    "project_number": "659879338452",
+    "project_id": "sandesh-5fcac",
+    "storage_bucket": "sandesh-5fcac.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:73112150455:android:8aa5bc6fa6ae2676638832",
+        "mobilesdk_app_id": "1:659879338452:android:7fab73561400c8607ab641",
         "android_client_info": {
           "package_name": "com.example.my_skenu"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "659879338452-90rbr5gn91dr4a90mr9lm9gj797dp83q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCI6LpySzrLIPEEZaIHfXaEEt20pvjk0Yc"
+          "current_key": "AIzaSyByMJ12hsnwZzFeKFXU3DhmaeI_-1g42IE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659879338452-90rbr5gn91dr4a90mr9lm9gj797dp83q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "659879338452-17ce17hml2dtgojflq29c0e48ep0qjaf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sandesh.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }
