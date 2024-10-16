@@ -141,6 +141,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
+  void showLogOutDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Are you sure to log out ? " ,style: TextStyle(fontSize: 18),),
+          actions: [
+            TextButton(
+              onPressed: () {
+                final _auth = FirebaseAuthMethods();
+                _auth.logOut(context);
+              },
+              child: const Text(
+                'Yes',
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'No',
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     UserModel model = Provider.of<UserProvider>(context).getModel;
@@ -152,8 +181,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           isMe
               ? IconButton(
                   onPressed: () {
-                    final _auth = FirebaseAuthMethods();
-                    _auth.logOut(context);
+                    showLogOutDialog();
                   },
                   icon: const Icon(
                     Icons.logout_outlined,
@@ -186,9 +214,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: Image.network(
                       postUserModel.photoUrl,
                       fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        return const Center(child: CircularProgressIndicator());
-                      },
                     ),
                   ),
                 ),
